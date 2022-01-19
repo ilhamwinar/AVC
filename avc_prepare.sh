@@ -38,7 +38,7 @@ sudo curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scri
 
 # SwapMemory JetsonHacksNano
 # ==================
-sudo curl https://raw.githubusercontent.com/JetsonHacksNano/resizeSwapMemory/master/setSwapMemorySize.sh setSwapMemorySize.sh 
+sudo curl -o setSwapMemorySize.sh https://raw.githubusercontent.com/JetsonHacksNano/resizeSwapMemory/master/setSwapMemorySize.sh
 sudo ./setSwapMemorySize -g 8
 
 # Read HDD ExFat
