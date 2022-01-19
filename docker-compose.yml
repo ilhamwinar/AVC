@@ -1,0 +1,123 @@
+version: "3.3"
+
+services:
+    LidarAPI:
+        container_name: LidarAPI
+        image: yudhabhakti/lidarapi
+        ports:
+            - "3008:3008"
+        environment:
+            TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+            CHAT_ID: ${CHAT_ID}
+            GERBANG: ${GERBANG}
+            GARDU: ${GARDU}
+            GTO: ${GTO}
+        volumes:
+            - /dev:/dev
+            - ${HDD}:/data
+        privileged: true
+        restart: always
+        logging:
+            driver: "json-file"
+            options:
+                tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+
+    HttpServer:
+        container_name: HttpServer
+        image: yudhabhakti/httpserver
+        ports:
+            - "8080:8080"
+        volumes:
+            - ${HDD}:/data
+        restart: always
+
+    AuditAPI:
+        container_name: AuditAPI
+        image: yudhabhakti/auditapi
+        ports:
+            - "3006:3006"
+        restart: always
+
+    AIcam:
+        container_name: AIcam
+        image: yudhabhakti/avc-ai
+        command: python3 /workspace/script/inference-thread-ws.py
+        runtime: nvidia
+        volumes:
+            - ${PWD}/.env:/workspace/script/.env
+            - ${PWD}/data:/workspace/data
+            - ${PWD}/model:/workspace/model
+            - ${PWD}/script:/workspace/script
+            - /etc/localtime:/etc/localtime:ro
+            - ${HDD}:/data
+        privileged: true
+        restart: always
+        logging:
+            driver: "json-file"
+            options:
+                tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+
+    Mongo:
+        container_name: Mongo
+        image: mongo:4.4
+        ports:
+            - 27017:27017
+        volumes:
+            - ${HDD}/mongodb:/data/db
+        restart: always
+
+    Influx:
+        container_name: Influx
+        image: influxdb:1.7
+        ports:
+            - 8086:8086
+        volumes:
+            - ${HDD}/influxdb:/var/lib/influxdb
+        restart: always
+
+    Dashboard:
+        container_name: Dashboard
+        image: yudhabhakti/dashboard
+        environment:
+            - REACT_APP_PROXY3008=${REACT_APP_PROXY3008}
+            - REACT_APP_PROXY3007=${REACT_APP_PROXY3007}
+        ports:
+            - 80:80
+        restart: always
+
+    Annotator:
+        container_name: Annotator
+        image: yudhabhakti/annotator
+        volumes:
+            - ${HDD}:/data
+        environment:
+            - REACT_APP_PROXY3006=${REACT_APP_PROXY3006}
+        ports:
+            - 81:80
+        restart: always
+
+    NodeExporter:
+        container_name: NodeExporter
+        image: prom/node-exporter
+        ports:
+            - 9100:9100
+        restart: always
+        hostname: ${HOSTNAME}
+
+    Loki:
+        container_name: Loki
+        image: grafana/loki:2.0.0
+        restart: always
+        ports:
+            - "3100:3100"
+        command: -config.file=/etc/loki/local-config.yaml
+
+    Promtail:
+        container_name: Promtail
+        image: grafana/promtail:2.0.0
+        privileged: true
+        restart: always
+        volumes:
+            - /var/lib/docker/containers:/var/lib/docker/containers
+            - ./docker-config.yml:/etc/promtail/docker-config.yml
+        command: -config.file=/etc/promtail/docker-config.yml
