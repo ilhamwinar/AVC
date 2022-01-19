@@ -8,7 +8,6 @@ sudo timedatectl set-timezone Asia/Jakarta
 # Set up the repository
 # =====================
 sudo apt-get update
-sudo apt-get install curl -y
 
 # Install Docker Engine
 # =====================
