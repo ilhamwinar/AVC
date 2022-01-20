@@ -1,3 +1,6 @@
+# Update Repository
+# ==========================
+git pull
 # Docker compose pull and up
 # ==========================
 docker-compose pull
