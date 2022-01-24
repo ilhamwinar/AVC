@@ -41,7 +41,7 @@ services:
     AIcam:
         container_name: AIcam
         image: yudhabhakti/avc-ai
-        command: python3 /workspace/script/inference-thread-ws.py
+        command: python3 /workspace/script/avc.py
         runtime: nvidia
         volumes:
             - ${PWD}/.env:/workspace/script/.env
