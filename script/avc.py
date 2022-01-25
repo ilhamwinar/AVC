@@ -59,8 +59,8 @@ ctypes.CDLL(PLUGIN_LIBRARY)
 # =============================================================
 # AI Params
 # =============================================================
-CONF_THRESH = 0.5
-IOU_THRESHOLD = 0.4
+CONF_THRESH = 0.6
+IOU_THRESHOLD = 0.2
 
 # =============================================================
 # Multiprocessing Params
@@ -650,6 +650,7 @@ if __name__ == "__main__":
             thread1 = inferThread(yolov5_wrapper, image1)
             thread1.start()
             result1 = list(chain(thread1.join(), buffer_list))
+            result1.sort() 
             # ====================================
             # Model Categories
             # 0 = Bus
@@ -673,17 +674,17 @@ if __name__ == "__main__":
                 # result3 = list(chain(thread3.join(), buffer_list))
                 result2.sort()
                 if (result1[0] == 4 and result2[0] == 3 and result2[1] == 3):
-                    # Golongan 5
-                    vtype = 5
+                    #Golongan 5
+                    golongan_prediksi = 5
                 elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 3) or (result1[0] == 4 and result2[0] == 2 and result2[1] == 2):
-                    # Golongan 4
-                    vtype = 4
+                    #Golongan 4
+                    golongan_prediksi = 4
                 elif (result1[0] == 5 and result2[0] == 3) or (result1[0] == 4 and result2[0] == 3):
-                    # Golongan 3
-                    vtype = 3
+                    #Golongan 3
+                    golongan_prediksi = 3
                 elif result1[0] == 5 or result1[0] == 4:
-                    # Golongan 2
-                    vtype = 2
+                    #Golongan 2
+                    golongan_prediksi = 2
 
             # print("{} [INFO] PREDICTION : {}, CONFIDENCE : {}, time elapsed: {} ".format(clocknow, vtype, conf, time.time() - t), flush=True)
             f1 = (

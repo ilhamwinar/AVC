@@ -71,7 +71,7 @@
     REACT_APP_PROXY3008 = //10.0.4.2:3008
     REACT_APP_PROXY3007 = //192.168.100.168:3007
     REACT_APP_PROXY3006 = //10.0.4.2:3006
-    REACT_APP_PROXY8080=//192.168.88.103:8080
+    REACT_APP_PROXY8080=//10.0.4.2:8080
 
     #AI Environment
     #================================================================
@@ -97,4 +97,9 @@
 - Menghentikan aplikasi (menggunakan script)
   ```bash
     ./stop.sh
+  ```
+# Aplikasi Control Unit
+- Update Repository (buka directory repository)
+  ```bash
+    git pull
   ```

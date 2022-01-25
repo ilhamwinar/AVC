@@ -64,3 +64,7 @@ echo -e "KERNEL==\"ttyS*\",MODE=\"0666\"\nKERNEL==\"ttyACM*\",MODE=\"0666\"\nKER
 # Setup MTU for SSH by Linux
 # ==================
 sudo ifconfig eth0 mtu 1200
+
+# Give Permission Start and Stop
+# ==================
+sudo chmod +x start_or_update.sh stop.sh
