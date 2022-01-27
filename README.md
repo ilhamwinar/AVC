@@ -19,6 +19,10 @@
     sudo chmod +x avc_prepare.sh
     sudo ./avc_prepare.sh
     ```
+  - Melakukan Download dan Update Aplikasi
+    ```bash
+    sudo ./update.sh
+    ```
   - Mematikan dan menyalakan ulang Control Unit
     ```bash
     sudo reboot
@@ -90,16 +94,15 @@
     RTSP_CAM3 = rtsp://admin:avc12345@10.0.4.12/cam/realmonitor?channel=1&subtype=0
     ```
 # Aplikasi Control Unit
-- Menjalankan atau memperbarui aplikasi (menggunakan script)
+- Memperbarui aplikasi
   ```bash
-    ./start_or_update.sh
+    ./update.sh
   ```
-- Menghentikan aplikasi (menggunakan script)
+- Menjalankan aplikasi
+  ```bash
+    ./start.sh
+  ```
+- Menghentikan aplikasi
   ```bash
     ./stop.sh
-  ```
-# Aplikasi Control Unit
-- Update Repository (buka directory repository)
-  ```bash
-    git pull
-  ```
+  ``

@@ -1,3 +1,3 @@
 # Docker compose down
 # ==========================
-docker-compose down
+docker-compose down --volumes

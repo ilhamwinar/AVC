@@ -27,6 +27,8 @@ else
     sh get-docker.sh
 fi
 
+sudo chmod 777 /var/run/docker.sock
+
 # Install Docker Compose
 # ======================
 sudo curl -L "https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -50,7 +52,7 @@ sudo apt install exfat-fuse exfat-utils
 
 # Make Directory in HDD for Database
 # ==================
-sudo mkdir -p data/{0,1,2,3,4,5,mongodb,influxdb,lidar}
+sudo mkdir -p /media/avc/WD/data/{0,1,2,3,4,5,lidar}
 
 # Setup PWM Fan
 # ==================
@@ -67,4 +69,4 @@ sudo ifconfig eth0 mtu 1200
 
 # Give Permission Start and Stop
 # ==================
-sudo chmod +x start_or_update.sh stop.sh
+sudo chmod +x start.sh stop.sh update.sh

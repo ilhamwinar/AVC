@@ -63,7 +63,7 @@ services:
         ports:
             - 27017:27017
         volumes:
-            - ${HDD}/mongodb:/data/db
+            - ${PWD}/db:/data/db
         restart: always
 
     Influx:
@@ -72,7 +72,7 @@ services:
         ports:
             - 8086:8086
         volumes:
-            - ${HDD}/influxdb:/var/lib/influxdb
+            - ${PWD}/influxdb:/var/lib/influxdb
         restart: always
 
     Dashboard:
