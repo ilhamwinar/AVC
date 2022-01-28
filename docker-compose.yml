@@ -1,5 +1,8 @@
 version: "3.3"
 
+networks:
+  loki:
+
 services:
     LidarAPI:
         container_name: LidarAPI
@@ -111,6 +114,8 @@ services:
         ports:
             - "3100:3100"
         command: -config.file=/etc/loki/local-config.yaml
+        networks:
+            - loki
 
     Promtail:
         container_name: Promtail
@@ -121,3 +126,5 @@ services:
             - /var/lib/docker/containers:/var/lib/docker/containers
             - ./docker-config.yml:/etc/promtail/docker-config.yml
         command: -config.file=/etc/promtail/docker-config.yml
+        networks:
+            - loki
