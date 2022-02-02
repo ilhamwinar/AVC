@@ -50,10 +50,6 @@ sudo add-apt-repository universe
 sudo apt update 
 sudo apt install exfat-fuse exfat-utils
 
-# Make Directory in HDD for Database
-# ==================
-sudo mkdir -p /media/avc/WD/data/{0,1,2,3,4,5,lidar}
-
 # Setup PWM Fan
 # ==================
 sudo mv rc.local /etc/

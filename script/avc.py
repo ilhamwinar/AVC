@@ -636,7 +636,6 @@ if __name__ == "__main__":
     # Thread Websocker Start
     detection.start()
 
-    vtype = 8
     while True:
         try:
             # Queue for Image from camera
@@ -652,6 +651,7 @@ if __name__ == "__main__":
             thread1.start()
             result1 = list(chain(thread1.join(), buffer_list))
             result1.sort()
+            vtype = 8
             # ====================================
             # Model Categories
             # 0 = Bus
