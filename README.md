@@ -98,6 +98,10 @@
   ```bash
     ./update.sh
   ```
+- Membuat folder hardisk aplikasi
+  ```bash
+    ./makedir.sh
+  ```
 - Menjalankan aplikasi
   ```bash
     ./start.sh
