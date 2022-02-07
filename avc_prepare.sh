@@ -27,8 +27,8 @@ else
     sh get-docker.sh
 fi
 
-sudo chmod 777 /var/run/docker.sock
 sudo usermod -aG docker $USER
+sudo chmod 777 /var/run/docker.sock
 
 # Install Docker Compose
 # ======================
