@@ -60,7 +60,7 @@ ctypes.CDLL(PLUGIN_LIBRARY)
 # AI Params
 # =============================================================
 CONF_THRESH = 0.6
-IOU_THRESHOLD = 0.2
+IOU_THRESHOLD = 0.1
 
 # =============================================================
 # Multiprocessing Params
@@ -646,51 +646,78 @@ if __name__ == "__main__":
             image3 = qImage3.get(timeout=1)
             logging.info("GET CAM 3")
             time_image = datetime.datetime.now().strftime("%d%m%y-%H%M%S")
-            # Thread Image Detection
-            thread1 = inferThread(yolov5_wrapper, image1)
-            thread1.start()
-            result1 = list(chain(thread1.join(), buffer_list))
-            result1.sort()
             vtype = 8
+            # Thread Image Detection
             # ====================================
             # Model Categories
             # 0 = Bus
             # 1 = Car
             # 2 = One Tire
-            # 3 = Two Tire
-            # 4 = Truck Large
-            # 5 = Truck Small
+            # 3 = Three Tire
+            # 4 = Two Tire
+            # 5 = Truck Large
+            # 6 = Truck Small
+            thread1 = inferThread(yolov5_wrapper, image1)
+            thread1.start()
+            raw_result1 = list(chain(thread1.join(), buffer_list))
+            raw_result1.sort()
+            # Filter Remove One Tire, Two Tire,and Three Tire Detection
+            result1 = [x for x in raw_result1 if x != 2 and x != 3 and x != 4]
             if result1[0] == 0:
                 # Golongan 1 Bus
                 vtype = 1
-            elif result1[0] == 1 or result1[0] == 7:
+            elif result1[0] == 1:
                 # Golongan 1
                 vtype = 0
             else:
                 thread2 = inferThread(yolov5_wrapper, image2)
                 thread2.start()
-                # thread3 = inferThread(yolov5_wrapper, image3)
-                # thread3.start()
-                result2 = list(chain(thread2.join(), buffer_list))
-                # result3 = list(chain(thread3.join(), buffer_list))
-                result2.sort()
-                if (result1[0] == 4 and result2[0] == 3 and result2[1] == 3):
+                raw_result2 = list(chain(thread2.join(), buffer_list))
+                raw_result2.sort()
+                result2 = [x for x in raw_result2 if x !=
+                           0 and x != 1 and x != 5 and x != 6]
+                # Truck L and Double Two Tire
+                if (result1[0] == 5 and result2[0] == 4 and result2[1] == 4):
                     # Golongan 5
                     vtype = 5
-                    golongan_prediksi = 5
-                elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 3) or (result1[0] == 4 and result2[0] == 2 and result2[1] == 2):
+                # Truck L and Double One Tire
+                elif (result1[0] == 5 and result2[0] == 2 and result2[1] == 2):
+                    # Check Cam 3
+                    thread3 = inferThread(yolov5_wrapper, image3)
+                    thread3.start()
+                    raw_result3 = list(chain(thread3.join(), buffer_list))
+                    raw_result3.sort()
+                    result3 = [x for x in raw_result3 if x !=
+                               0 and x != 1 and x != 3 and x != 4 and x != 5 and x != 6]
+                    if (result3[0] == 2 and result3[1] == 2):
+                        # Golongan 4
+                        golongan_prediksi = 4
+                    else:
+                       # Golongan 3
+                        golongan_prediksi = 3
                     # Golongan 4
                     vtype = 4
-                    golongan_prediksi = 4
-                elif (result1[0] == 5 and result2[0] == 3) or (result1[0] == 4 and result2[0] == 3):
+                # Truck L and One Tire and Double Tire
+                elif (result1[0] == 5 and result2[0] == 2 and result2[1] == 4):
+                    # Check Cam 3
+                    thread3 = inferThread(yolov5_wrapper, image3)
+                    thread3.start()
+                    result3 = thread3.join()
+                    if 4 in result3:
+                        # Golongan 5
+                        vtype = 5
+                    else:
+                        # Golongan 4
+                        vtype = 4
+                # Truck L and Two Tire
+                elif (result1[0] == 5 and result2[0] == 4):
                     # Golongan 3
                     vtype = 3
-                    golongan_prediksi = 3
-                elif result1[0] == 5 or result1[0] == 4:
+                # Truck L or Truck S
+                elif result1[0] == 6 or result1[0] == 5:
                     # Golongan 2
                     vtype = 2
-                    golongan_prediksi = 2
-            
+
             # print("{} [INFO] PREDICTION : {}, CONFIDENCE : {}, time elapsed: {} ".format(clocknow, vtype, conf, time.time() - t), flush=True)
             f1 = (
                 datapath
@@ -737,9 +764,6 @@ if __name__ == "__main__":
                 + "-"
                 + "cam3.jpg"
             )
-            cv2.imwrite(f1, image1)
-            cv2.imwrite(f2, image2)
-            cv2.imwrite(f3, image3)
             try:
                 ws.send(
                     json.dumps(
@@ -757,11 +781,14 @@ if __name__ == "__main__":
                         }
                     )
                 )
-                logging.info("GOLONGAN : %d",vtype)
+                logging.info("GOLONGAN : %d", vtype)
                 logging.info("SEND SUCCESS")
             except Exception as e:
                 logging.error(f"Exception occurred in sending: {e}")
                 telegram_bot_sendtext(f"Exception occurred in sending: {e}")
+            cv2.imwrite(f1, image1)
+            cv2.imwrite(f2, image2)
+            cv2.imwrite(f3, image3)
         except Empty:
             continue
 
@@ -773,4 +800,3 @@ if __name__ == "__main__":
     im2.join()
     im3.terminate()
     im3.join()
-
