@@ -764,28 +764,29 @@ if __name__ == "__main__":
                 + "-"
                 + "cam3.jpg"
             )
-            try:
-                ws.send(
-                    json.dumps(
-                        {
-                            "vehicle_type": vtype,
-                            "confidence_type_0": float(0),
-                            "confidence_type_1": float(0),
-                            "confidence_type_2": float(0),
-                            "confidence_type_3": float(0),
-                            "confidence_type_4": float(0),
-                            "confidence_type_5": float(0),
-                            "cam1_name": f1,
-                            "cam2_name": f2,
-                            "cam3_name": f3,
-                        }
+            if vtype != 8:
+                try:
+                    ws.send(
+                        json.dumps(
+                            {
+                                "vehicle_type": vtype,
+                                "confidence_type_0": float(0),
+                                "confidence_type_1": float(0),
+                                "confidence_type_2": float(0),
+                                "confidence_type_3": float(0),
+                                "confidence_type_4": float(0),
+                                "confidence_type_5": float(0),
+                                "cam1_name": f1,
+                                "cam2_name": f2,
+                                "cam3_name": f3,
+                            }
+                        )
                     )
-                )
-                logging.info("GOLONGAN : %d", vtype)
-                logging.info("SEND SUCCESS")
-            except Exception as e:
-                logging.error(f"Exception occurred in sending: {e}")
-                telegram_bot_sendtext(f"Exception occurred in sending: {e}")
+                    logging.info("GOLONGAN : %d", vtype)
+                    logging.info("SEND SUCCESS")
+                except Exception as e:
+                    logging.error(f"Exception occurred in sending: {e}")
+                    telegram_bot_sendtext(f"Exception occurred in sending: {e}")
             cv2.imwrite(f1, image1)
             cv2.imwrite(f2, image2)
             cv2.imwrite(f3, image3)

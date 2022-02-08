@@ -109,4 +109,4 @@
 - Menghentikan aplikasi
   ```bash
     ./stop.sh
-  ``
+  ```
