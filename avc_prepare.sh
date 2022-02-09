@@ -59,6 +59,7 @@ sudo chmod u+x /etc/rc.local
 # Modify serial port permission rules
 # ===================================
 echo -e "KERNEL==\"ttyS*\",MODE=\"0666\"\nKERNEL==\"ttyACM*\",MODE=\"0666\"\nKERNEL==\"ttyUSB*\",MODE=\"0666\"" | sudo tee /etc/udev/rules.d/99-serial.rules
+sudo chmod 777 /dev/serial/by-id/usb-Prolific_Technology_Inc._USB-Serial_Controller-if00-port0
 
 # Setup MTU for SSH by Linux
 # ==================

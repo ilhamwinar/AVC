@@ -37,6 +37,7 @@ MASK_CAM2 = config("MASK_CAM2")
 MASK_CAM3 = config("MASK_CAM3")
 MODEL_2CAM = config("MODEL_2CAM")
 MODEL_3CAM = config("MODEL_3CAM")
+MODEL_OBJECT_DETECTION = config("MODEL_OBJECT_DETECTION")
 RTSP_CAM1 = config("RTSP_CAM1")
 RTSP_CAM2 = config("RTSP_CAM2")
 RTSP_CAM3 = config("RTSP_CAM3")
@@ -53,7 +54,7 @@ logging.basicConfig(
 # Engine Params
 # =============================================================
 PLUGIN_LIBRARY = os.path.join(CWD, "model", "libmyplugins.so")
-engine_file_path = os.path.join(CWD, "model", "avc.engine")
+engine_file_path = os.path.join(CWD, "model", MODEL_OBJECT_DETECTION)
 ctypes.CDLL(PLUGIN_LIBRARY)
 
 # =============================================================
@@ -290,7 +291,7 @@ class YoLov5TRT(object):
         """
         description: postprocess the prediction
         param:
-            output:     A numpy likes [num_boxes,cx,cy,w,h,conf,cls_id, cx,cy,w,h,conf,cls_id, ...] 
+            output:     A numpy likes [num_boxes,cx,cy,w,h,conf,cls_id, cx,cy,w,h,conf,cls_id, ...]
             origin_h:   height of original image
             origin_w:   width of original image
         return:
@@ -315,7 +316,7 @@ class YoLov5TRT(object):
         description: compute the IoU of two bounding boxes
         param:
             box1: A box coordinate (can be (x1, y1, x2, y2) or (x, y, w, h))
-            box2: A box coordinate (can be (x1, y1, x2, y2) or (x, y, w, h))            
+            box2: A box coordinate (can be (x1, y1, x2, y2) or (x, y, w, h))
             x1y1x2y2: select the coordinate format
         return:
             iou: computed iou
@@ -764,29 +765,30 @@ if __name__ == "__main__":
                 + "-"
                 + "cam3.jpg"
             )
-            if vtype != 8:
-                try:
-                    ws.send(
-                        json.dumps(
-                            {
-                                "vehicle_type": vtype,
-                                "confidence_type_0": float(0),
-                                "confidence_type_1": float(0),
-                                "confidence_type_2": float(0),
-                                "confidence_type_3": float(0),
-                                "confidence_type_4": float(0),
-                                "confidence_type_5": float(0),
-                                "cam1_name": f1,
-                                "cam2_name": f2,
-                                "cam3_name": f3,
-                            }
-                        )
+            try:
+                if vtype == 8:
+                    vtype = 7
+                ws.send(
+                    json.dumps(
+                        {
+                            "vehicle_type": vtype,
+                            "confidence_type_0": float(0),
+                            "confidence_type_1": float(0),
+                            "confidence_type_2": float(0),
+                            "confidence_type_3": float(0),
+                            "confidence_type_4": float(0),
+                            "confidence_type_5": float(0),
+                            "cam1_name": f1,
+                            "cam2_name": f2,
+                            "cam3_name": f3,
+                        }
                     )
-                    logging.info("GOLONGAN : %d", vtype)
-                    logging.info("SEND SUCCESS")
-                except Exception as e:
-                    logging.error(f"Exception occurred in sending: {e}")
-                    telegram_bot_sendtext(f"Exception occurred in sending: {e}")
+                )
+                logging.info("GOLONGAN : %d", vtype)
+                logging.info("SEND SUCCESS")
+            except Exception as e:
+                logging.error(f"Exception occurred in sending: {e}")
+                telegram_bot_sendtext(f"Exception occurred in sending: {e}")
             cv2.imwrite(f1, image1)
             cv2.imwrite(f2, image2)
             cv2.imwrite(f3, image3)
