@@ -95,6 +95,7 @@ services:
             - ${HDD}:/data
         environment:
             - REACT_APP_PROXY3006=${REACT_APP_PROXY3006}
+            - REACT_APP_PROXY8080=${REACT_APP_PROXY8080}
         ports:
             - 81:80
         restart: always
