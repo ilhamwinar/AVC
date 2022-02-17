@@ -27,7 +27,7 @@ else
     sh get-docker.sh
 fi
 
-sudo chmod 666 /var/run/docker.sock
+sudo chmod 777 /var/run/docker.sock
 sudo usermod -aG docker $USER
 
 # Install Docker Compose
@@ -67,4 +67,4 @@ sudo ifconfig eth0 mtu 1200
 
 # Give Permission Start and Stop
 # ==================
-sudo chmod +x start.sh stop.sh update.sh makedir.sh
+sudo chmod +x start.sh stop.sh update.sh makedir.sh mount.sh
