@@ -45,7 +45,7 @@
     #================================================================
     #HDD --> Alamat direktori hardisk yang terbaca oleh CU
     #================================================================
-    HDD = "/media/avc/WD/data/"
+    HDD = "/home/avc/data/"
 
     #GTO STATUS
     #================================================================
@@ -62,7 +62,7 @@
     #================================================================
     TELEGRAM_BOT_TOKEN = 1770185119:AAFKfQHyVHYwhwJT66IeL9mRiBl4nvW0UxQ
     CHAT_ID = -1001323845503
-    GERBANG = Cikunir4
+    GERBANG = CIKUNIR4
     GARDU = 5
 
     #Dashboard Environment
