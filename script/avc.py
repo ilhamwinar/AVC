@@ -37,7 +37,8 @@ MASK_CAM2 = config("MASK_CAM2")
 MASK_CAM3 = config("MASK_CAM3")
 MODEL_2CAM = config("MODEL_2CAM")
 MODEL_3CAM = config("MODEL_3CAM")
-MODEL_OBJECT_DETECTION = config("MODEL_OBJECT_DETECTION")
+MODEL_OBJECT_DETECTION_CAM12 = config("MODEL_OBJECT_DETECTION_CAM12")
+MODEL_OBJECT_DETECTION_CAM3 = config("MODEL_OBJECT_DETECTION_CAM3")
 RTSP_CAM1 = config("RTSP_CAM1")
 RTSP_CAM2 = config("RTSP_CAM2")
 RTSP_CAM3 = config("RTSP_CAM3")
@@ -54,7 +55,8 @@ logging.basicConfig(
 # Engine Params
 # =============================================================
 PLUGIN_LIBRARY = os.path.join(CWD, "model", "libmyplugins.so")
-engine_file_path = os.path.join(CWD, "model", MODEL_OBJECT_DETECTION)
+engine_file_path_cam12 = os.path.join(CWD, "model", MODEL_OBJECT_DETECTION_CAM12)
+engine_file_path_cam3 = os.path.join(CWD, "model", MODEL_OBJECT_DETECTION_CAM3)
 ctypes.CDLL(PLUGIN_LIBRARY)
 
 # =============================================================
@@ -621,10 +623,11 @@ if __name__ == "__main__":
     )
     im3.name = "Cam3"
     # YoLov5TRT instance
-    yolov5_wrapper = YoLov5TRT(engine_file_path)
+    yolov5_wrapper_cam12 = YoLov5TRT(engine_file_path_cam12)
+    yolov5_wrapper_cam3 = YoLov5TRT(engine_file_path_cam3)
     # Create a new thread to do warm_up
-    for i in range(10):
-        thread1 = warmUpThread(yolov5_wrapper)
+    for i in range(5):
+        thread1 = warmUpThread(yolov5_wrapper_cam12)
         thread1.start()
         thread1.join()
 
@@ -650,20 +653,24 @@ if __name__ == "__main__":
             vtype = 8
             # Thread Image Detection
             # ====================================
-            # Model Categories
+            # Model Categories Cam 1 and Cam 2
             # 0 = Bus
             # 1 = Car
             # 2 = One Tire
-            # 3 = Three Tire
-            # 4 = Two Tire
-            # 5 = Truck Large
-            # 6 = Truck Small
-            thread1 = inferThread(yolov5_wrapper, image1)
+            # 3 = Two Tire
+            # 4 = Truck Large
+            # 5 = Truck Small
+            # ====================================
+            # Model Categories Cam 3
+            # 0 = One Tire
+            # 1 = Three Tire
+            # 2 = Two Tire
+            thread1 = inferThread(yolov5_wrapper_cam12, image1)
             thread1.start()
             raw_result1 = list(chain(thread1.join(), buffer_list))
             raw_result1.sort()
             # Filter Remove One Tire, Two Tire,and Three Tire Detection
-            result1 = [x for x in raw_result1 if x != 2 and x != 3 and x != 4]
+            result1 = [x for x in raw_result1 if x != 2 and x != 3]
             if result1[0] == 0:
                 # Golongan 1 Bus
                 vtype = 1
@@ -671,26 +678,24 @@ if __name__ == "__main__":
                 # Golongan 1
                 vtype = 0
             else:
-                thread2 = inferThread(yolov5_wrapper, image2)
+                thread2 = inferThread(yolov5_wrapper_cam12, image2)
                 thread2.start()
                 raw_result2 = list(chain(thread2.join(), buffer_list))
                 raw_result2.sort()
                 result2 = [x for x in raw_result2 if x !=
-                           0 and x != 1 and x != 5 and x != 6]
+                           0 and x != 1 and x != 4 and x != 5]
                 # Truck L and Double Two Tire
-                if (result1[0] == 5 and result2[0] == 4 and result2[1] == 4):
+                if (result1[0] == 4 and result2[0] == 3 and result2[1] == 3):
                     # Golongan 5
                     vtype = 5
                 # Truck L and Double One Tire
-                elif (result1[0] == 5 and result2[0] == 2 and result2[1] == 2):
+                elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 2):
                     # Check Cam 3
-                    thread3 = inferThread(yolov5_wrapper, image3)
+                    thread3 = inferThread(yolov5_wrapper_cam3, image3)
                     thread3.start()
                     raw_result3 = list(chain(thread3.join(), buffer_list))
                     raw_result3.sort()
-                    result3 = [x for x in raw_result3 if x !=
-                               0 and x != 1 and x != 3 and x != 4 and x != 5 and x != 6]
-                    if (result3[0] == 2 and result3[1] == 2):
+                    if (result3[0] == 0 and result3[1] == 0):
                         # Golongan 4
                         golongan_prediksi = 4
                     else:
@@ -699,23 +704,23 @@ if __name__ == "__main__":
                     # Golongan 4
                     vtype = 4
                 # Truck L and One Tire and Double Tire
-                elif (result1[0] == 5 and result2[0] == 2 and result2[1] == 4):
+                elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 3):
                     # Check Cam 3
-                    thread3 = inferThread(yolov5_wrapper, image3)
+                    thread3 = inferThread(yolov5_wrapper_cam3, image3)
                     thread3.start()
                     result3 = thread3.join()
-                    if 4 in result3:
+                    if 1 in result3:
                         # Golongan 5
                         vtype = 5
                     else:
                         # Golongan 4
                         vtype = 4
                 # Truck L and Two Tire
-                elif (result1[0] == 5 and result2[0] == 4):
+                elif (result1[0] == 4 and result2[0] == 3):
                     # Golongan 3
                     vtype = 3
                 # Truck L or Truck S
-                elif result1[0] == 6 or result1[0] == 5:
+                elif result1[0] == 5 or result1[0] == 4:
                     # Golongan 2
                     vtype = 2
 
