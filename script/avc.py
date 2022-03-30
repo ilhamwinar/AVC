@@ -62,7 +62,7 @@ ctypes.CDLL(PLUGIN_LIBRARY)
 # =============================================================
 # AI Params
 # =============================================================
-CONF_THRESH = 0.6
+CONF_THRESH = 0.5
 IOU_THRESHOLD = 0.1
 
 # =============================================================
@@ -643,11 +643,11 @@ if __name__ == "__main__":
     while True:
         try:
             # Queue for Image from camera
-            image1 = qImage1.get(timeout=0.5)
+            image1 = qImage1.get(timeout=0.2)
             logging.info("GET CAM 1")
-            image2 = qImage2.get(timeout=1)
+            image2 = qImage2.get(timeout=0.5)
             logging.info("GET CAM 2")
-            image3 = qImage3.get(timeout=1)
+            image3 = qImage3.get(timeout=0.5)
             logging.info("GET CAM 3")
             time_image = datetime.datetime.now().strftime("%d%m%y-%H%M%S")
             vtype = 8
