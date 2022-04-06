@@ -466,7 +466,7 @@ def on_message(ws, message):
             if size1 > 0:
                 for i in range(0, size1):
                     try:
-                        qImage1.get(timeout=0.1)
+                        qImage1.get(timeout=0.5)
                     except Exception as e:
                         logging.error(f"Exception in clearing queue im1 : {e}")
                         telegram_bot_sendtext(
@@ -474,7 +474,7 @@ def on_message(ws, message):
             if size2 > 0:
                 for i in range(0, size2):
                     try:
-                        qImage2.get(timeout=0.1)
+                        qImage2.get(timeout=0.5)
                     except Exception as e:
                         logging.error(f"Exception in clearing queue im2 : {e}")
                         telegram_bot_sendtext(
@@ -482,7 +482,7 @@ def on_message(ws, message):
             if size3 > 0:
                 for i in range(0, size3):
                     try:
-                        qImage3.get(timeout=0.1)
+                        qImage3.get(timeout=0.5)
                     except Exception as e:
                         logging.error(f"Exception in clearing queue im3 : {e}")
                         telegram_bot_sendtext(
@@ -548,7 +548,7 @@ def getCamera(src, qListen, qImage, att):
     while True:
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(2)
+            s.settimeout(5)
             s.connect((baseUrl, 554))
             if cap.isOpened():
                 ret, image = cap.read()
@@ -643,7 +643,7 @@ if __name__ == "__main__":
     while True:
         try:
             # Queue for Image from camera
-            image1 = qImage1.get(timeout=0.2)
+            image1 = qImage1.get(timeout=0.5)
             logging.info("GET CAM 1")
             image2 = qImage2.get(timeout=0.5)
             logging.info("GET CAM 2")

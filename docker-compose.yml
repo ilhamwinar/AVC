@@ -23,6 +23,7 @@ services:
         logging:
             driver: "json-file"
             options:
+                max-size: 3m
                 tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
 
     HttpServer:
@@ -58,6 +59,7 @@ services:
         logging:
             driver: "json-file"
             options:
+                max-size: 3m
                 tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
 
     Mongo:
