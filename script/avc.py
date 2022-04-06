@@ -723,6 +723,7 @@ if __name__ == "__main__":
                 elif result1[0] == 5 or result1[0] == 4:
                     # Golongan 2
                     vtype = 2
+                    time.sleep(0.3)
 
             # print("{} [INFO] PREDICTION : {}, CONFIDENCE : {}, time elapsed: {} ".format(clocknow, vtype, conf, time.time() - t), flush=True)
             f1 = (
