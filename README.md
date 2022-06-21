@@ -1,7 +1,3 @@
-<p align="center">
-    <img src="https://www.jmiot.org/wp-content/uploads/2021/05/bg3-1024x576.png" width="400" height="200">
-</p>
-
 **GitHub Stat(s):**  
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/bhaktiyudha/AVC?logo=github) ![GitHub all releases](https://img.shields.io/github/downloads/bhaktiyudha/AVC/total?logo=github)
 
