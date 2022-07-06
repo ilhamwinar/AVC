@@ -8,7 +8,7 @@
 - ## Konfigurasi dan Instalasi Awal
   - Mendownload Repository
     ```bash
-    git clone https://github.com/bhaktiyudha/AVC
+    git clone https://github.com/ilhamwinar/AVC
     ```
   - Melakukan Konfigurasi Awal
     ```bash
