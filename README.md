@@ -86,6 +86,7 @@
       MODEL_2CAM = 7class-v1.plan
       MODEL_3CAM = 6class-3cam-d1-bn-v2.plan
       MODEL_OBJECT_DETECTION_CAM12 = avc_cam12.engine
+      MODEL_OBJECT_DETECTION_CAM2 = doubletire.engine
       MODEL_OBJECT_DETECTION_CAM3 = avc_cam3.engine
       RTSP_CAM1 = rtsp://root:avc12345@10.0.3.10/live1s1.sdp
       RTSP_CAM2 = rtsp://admin:avc12345@10.0.3.11/cam/realmonitor?channel=1&subtype=0
