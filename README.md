@@ -1,5 +1,5 @@
 **GitHub Stat(s):**  
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/bhaktiyudha/AVC?logo=github) ![GitHub all releases](https://img.shields.io/github/downloads/bhaktiyudha/AVC/total?logo=github)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/bhaktiyudha/AVC?logo=github) ![GitHub all releases](https://img.shields.io/github/downloads/ilhamwinar/AVC/total?logo=github)
 
 **DockerHub Stat(s):**  
 ![Docker Pulls](https://img.shields.io/docker/pulls/yudhabhakti/avc-ai?logo=docker) ![Docker Image Size (tag)](https://img.shields.io/docker/image-size/yudhabhakti/avc-ai/latest?logo=docker) ![Docker Image Version (latest by date)](https://img.shields.io/docker/v/yudhabhakti/avc-ai?logo=docker&sort=date)
