@@ -38,6 +38,7 @@ MASK_CAM3 = config("MASK_CAM3")
 MODEL_2CAM = config("MODEL_2CAM")
 MODEL_3CAM = config("MODEL_3CAM")
 MODEL_OBJECT_DETECTION_CAM12 = config("MODEL_OBJECT_DETECTION_CAM12")
+MODEL_OBJECT_DETECTION_CAM2 = config("MODEL_OBJECT_DETECTION_CAM2")
 MODEL_OBJECT_DETECTION_CAM3 = config("MODEL_OBJECT_DETECTION_CAM3")
 RTSP_CAM1 = config("RTSP_CAM1")
 RTSP_CAM2 = config("RTSP_CAM2")
@@ -56,13 +57,14 @@ logging.basicConfig(
 # =============================================================
 PLUGIN_LIBRARY = os.path.join(CWD, "model", "libmyplugins.so")
 engine_file_path_cam12 = os.path.join(CWD, "model", MODEL_OBJECT_DETECTION_CAM12)
+engine_file_path_cam2 = os.path.join(CWD, "model", MODEL_OBJECT_DETECTION_CAM2)
 engine_file_path_cam3 = os.path.join(CWD, "model", MODEL_OBJECT_DETECTION_CAM3)
 ctypes.CDLL(PLUGIN_LIBRARY)
 
 # =============================================================
 # AI Params
 # =============================================================
-CONF_THRESH = 0.5
+CONF_THRESH = 0.4
 IOU_THRESHOLD = 0.1
 
 # =============================================================
@@ -624,6 +626,7 @@ if __name__ == "__main__":
     im3.name = "Cam3"
     # YoLov5TRT instance
     yolov5_wrapper_cam12 = YoLov5TRT(engine_file_path_cam12)
+    yolov5_wrapper_cam2 = YoLov5TRT(engine_file_path_cam2)
     yolov5_wrapper_cam3 = YoLov5TRT(engine_file_path_cam3)
     # Create a new thread to do warm_up
     for i in range(5):
@@ -682,6 +685,7 @@ if __name__ == "__main__":
                 thread2.start()
                 raw_result2 = list(chain(thread2.join(), buffer_list))
                 raw_result2.sort()
+                logging.info(raw_result2)
                 result2 = [x for x in raw_result2 if x !=
                            0 and x != 1 and x != 4 and x != 5]
                 # Truck L and Double Two Tire
@@ -709,6 +713,7 @@ if __name__ == "__main__":
                     thread3 = inferThread(yolov5_wrapper_cam3, image3)
                     thread3.start()
                     result3 = thread3.join()
+                    logging.info(result3)
                     if 1 in result3:
                         # Golongan 5
                         vtype = 5
@@ -723,6 +728,15 @@ if __name__ == "__main__":
                 elif result1[0] == 5 or result1[0] == 4:
                     # Golongan 2
                     vtype = 2
+                    logging.info("awalnya: "+str(vtype))
+                    thread4 = inferThread(yolov5_wrapper_cam2, image2)
+                    thread4.start()
+                    result4 = thread4.join()
+                    logging.info(result4)
+                    if 2 in result4:
+                      vtype = 1
+                    
+                    logging.info("sekarang: "+str(vtype))  
                     time.sleep(0.3)
 
             # print("{} [INFO] PREDICTION : {}, CONFIDENCE : {}, time elapsed: {} ".format(clocknow, vtype, conf, time.time() - t), flush=True)
@@ -773,7 +787,7 @@ if __name__ == "__main__":
             )
             try:
                 if vtype == 8:
-                    vtype = 7
+                    vtype = 1
                 ws.send(
                     json.dumps(
                         {
