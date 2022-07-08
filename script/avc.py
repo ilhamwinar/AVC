@@ -626,13 +626,13 @@ if __name__ == "__main__":
     im3.name = "Cam3"
     # YoLov5TRT instance
     yolov5_wrapper_cam12 = YoLov5TRT(engine_file_path_cam12)
-    yolov5_wrapper_cam2 = YoLov5TRT(engine_file_path_cam2)
+    # yolov5_wrapper_cam2 = YoLov5TRT(engine_file_path_cam2)
     yolov5_wrapper_cam3 = YoLov5TRT(engine_file_path_cam3)
     # Create a new thread to do warm_up
-    for i in range(5):
-        thread1 = warmUpThread(yolov5_wrapper_cam12)
-        thread1.start()
-        thread1.join()
+    # for i in range(5):
+    #     thread1 = warmUpThread(yolov5_wrapper_cam12)
+    #     thread1.start()
+    #     thread1.join()
 
     # Thread Camera Start
     im1.start()
