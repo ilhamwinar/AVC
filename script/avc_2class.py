@@ -626,13 +626,13 @@ if __name__ == "__main__":
     im3.name = "Cam3"
     # YoLov5TRT instance
     yolov5_wrapper_cam12 = YoLov5TRT(engine_file_path_cam12)
-    yolov5_wrapper_cam2 = YoLov5TRT(engine_file_path_cam2)
+    # yolov5_wrapper_cam2 = YoLov5TRT(engine_file_path_cam2)
     yolov5_wrapper_cam3 = YoLov5TRT(engine_file_path_cam3)
     # Create a new thread to do warm_up
-    for i in range(5):
-        thread1 = warmUpThread(yolov5_wrapper_cam12)
-        thread1.start()
-        thread1.join()
+    # for i in range(5):
+    #     thread1 = warmUpThread(yolov5_wrapper_cam12)
+    #     thread1.start()
+    #     thread1.join()
 
     # Thread Camera Start
     im1.start()
@@ -681,12 +681,12 @@ if __name__ == "__main__":
                 # Golongan 1
                 vtype = 0
             else:
-                thread2 = inferThread(yolov5_wrapper_cam12, image2)
-                thread2.start()
-                raw_result2 = list(chain(thread2.join(), buffer_list))
-                raw_result2.sort()
-                logging.info(raw_result2)
-                result2 = [x for x in raw_result2 if x !=
+                thread1 = inferThread(yolov5_wrapper_cam12, image2)
+                thread1.start()
+                raw_result1 = list(chain(thread1.join(), buffer_list))
+                raw_result1.sort()
+                logging.info(raw_result1)
+                result2 = [x for x in raw_result1 if x !=
                            0 and x != 1 and x != 4 and x != 5]
                 # Truck L and Double Two Tire
                 if (result1[0] == 4 and result2[0] == 3 and result2[1] == 3):
@@ -697,17 +697,13 @@ if __name__ == "__main__":
                     # Check Cam 3
                     thread3 = inferThread(yolov5_wrapper_cam3, image3)
                     thread3.start()
-                    raw_result3 = list(chain(thread3.join(), buffer_list))
-                    raw_result3.sort()
-                    if (result3[0] == 0 and result3[1] == 0):
-                        # Golongan 4
-                        golongan_prediksi = 4
-                    else:
-                       # Golongan 3
-                        golongan_prediksi = 3
-                    # Golongan 4
+                    result3 = list(chain(thread3.join(), buffer_list))
+                    result3.sort()
+                    logging.info(result3)
                     vtype = 4
-                # Truck L and One Tire and Double Tire
+                    if 0 in result3:
+                        vtype = 3
+                    logging.info("sekarang golongan berubah menjadi: "+str(vtype))
                 elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 3):
                     # Check Cam 3
                     thread3 = inferThread(yolov5_wrapper_cam3, image3)
@@ -728,16 +724,16 @@ if __name__ == "__main__":
                 elif result1[0] == 5 or result1[0] == 4:
                     # Golongan 2
                     vtype = 2
-                    logging.info("awalnya: "+str(vtype))
-                    thread4 = inferThread(yolov5_wrapper_cam2, image2)
-                    thread4.start()
-                    result4 = thread4.join()
-                    logging.info(result4)
-                    if 2 in result4:
-                      vtype = 1
+                    # logging.info("awalnya: "+str(vtype))
+                    # thread4 = inferThread(yolov5_wrapper_cam2, image2)
+                    # thread4.start()
+                    # result4 = thread4.join()
+                    # logging.info(result4)
+                    # if 2 in result4:
+                    #   vtype = 1
                     
-                    logging.info("sekarang: "+str(vtype))  
-                    time.sleep(0.3)
+                    # logging.info("sekarang: "+str(vtype))  
+                    # time.sleep(0.3)
 
             # print("{} [INFO] PREDICTION : {}, CONFIDENCE : {}, time elapsed: {} ".format(clocknow, vtype, conf, time.time() - t), flush=True)
             f1 = (
