@@ -56,7 +56,6 @@ logging.basicConfig(
 # =============================================================
 PLUGIN_LIBRARY = os.path.join(CWD, "model", "libmyplugins.so")
 engine_file_path_cam12 = os.path.join(CWD, "model", MODEL_OBJECT_DETECTION_CAM12)
-engine_file_path_cam2 = os.path.join(CWD, "model", MODEL_OBJECT_DETECTION_CAM2)
 engine_file_path_cam3 = os.path.join(CWD, "model", MODEL_OBJECT_DETECTION_CAM3)
 ctypes.CDLL(PLUGIN_LIBRARY)
 
