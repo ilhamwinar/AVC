@@ -44,7 +44,7 @@ services:
 
     AIcam:
         container_name: AIcam
-        image: yudhabhakti/avc-ai
+        image: yudhabhakti/avc-ai:iot
         command: python3 /workspace/script/avc.py
         runtime: nvidia
         volumes:
