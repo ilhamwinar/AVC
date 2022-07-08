@@ -681,12 +681,12 @@ if __name__ == "__main__":
                 # Golongan 1
                 vtype = 0
             else:
-                thread1 = inferThread(yolov5_wrapper_cam12, image2)
-                thread1.start()
-                raw_result1 = list(chain(thread1.join(), buffer_list))
-                raw_result1.sort()
-                logging.info(raw_result1)
-                result2 = [x for x in raw_result1 if x !=
+                thread2 = inferThread(yolov5_wrapper_cam12, image2)
+                thread2.start()
+                raw_result2 = list(chain(thread2.join(), buffer_list))
+                raw_result2.sort()
+                logging.info(raw_result2)
+                result2 = [x for x in raw_result2 if x !=
                            0 and x != 1 and x != 4 and x != 5]
                 # Truck L and Double Two Tire
                 if (result1[0] == 4 and result2[0] == 3 and result2[1] == 3):
@@ -728,16 +728,16 @@ if __name__ == "__main__":
                 elif result1[0] == 5 or result1[0] == 4:
                     # Golongan 2
                     vtype = 2
-                    # logging.info("awalnya: "+str(vtype))
-                    # thread4 = inferThread(yolov5_wrapper_cam2, image2)
-                    # thread4.start()
-                    # result4 = thread4.join()
-                    # logging.info(result4)
-                    # if 2 in result4:
-                    #   vtype = 1
+                    logging.info("awalnya: "+str(vtype))
+                    thread4 = inferThread(yolov5_wrapper_cam2, image2)
+                    thread4.start()
+                    result4 = thread4.join()
+                    logging.info(result4)
+                    if 2 in result4:
+                      vtype = 1
                     
-                    # logging.info("sekarang: "+str(vtype))  
-                    # time.sleep(0.3)
+                    logging.info("sekarang: "+str(vtype))  
+                    time.sleep(0.3)
 
             # print("{} [INFO] PREDICTION : {}, CONFIDENCE : {}, time elapsed: {} ".format(clocknow, vtype, conf, time.time() - t), flush=True)
             f1 = (
