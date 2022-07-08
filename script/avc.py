@@ -703,7 +703,7 @@ if __name__ == "__main__":
                     vtype = 4
                     if 1 in result3:
                         vtype = 3
-                    elif 3 in result3:
+                    elif 2 in result3:
                         vtype = 5
                     logging.info("GOL 4 MENJADI: "+str(vtype))
                 elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 3):
@@ -711,14 +711,14 @@ if __name__ == "__main__":
                     thread4 = inferThread(yolov5_wrapper_cam3, image3)
                     thread4.start()
                     result4 = thread4.join()
-                    logging.info("perulangan golongan 5 atau 4: " + str(result4))
+                    logging.info("BUFFER 5: " + str(result4))
                     vtype = 5
                     if 1 in result4:
                         # Golongan 5
                         vtype = 3
                     elif 3 in result4:
                         vtype = 4
-                    logging.info("GOL 3 MENJADI: "+str(vtype))    
+                    logging.info("GOL 5 MENJADI: "+str(vtype))    
                 # Truck L and Two Tire
                 elif (result1[0] == 4 and result2[0] == 3):
                     # Golongan 3
@@ -730,11 +730,11 @@ if __name__ == "__main__":
                     thread5 = inferThread(yolov5_wrapper_cam3, image2)
                     thread5.start()
                     result5 = thread5.join()
-                    logging.info("perulangan golongan 2 atau 1: " + str(result5))
+                    logging.info("BUFFER 2: " + str(result5))
                     if 0 in result5:
-                        # Golongan 5
+                        # Golongan 0
                         vtype = 0
-                        logging.info("BERUBAH MENJADI: " + str(vtype))
+                        logging.info("GOL 2 BERUBAH MENJADI: " + str(vtype))
 
 
             # print("{} [INFO] PREDICTION : {}, CONFIDENCE : {}, time elapsed: {} ".format(clocknow, vtype, conf, time.time() - t), flush=True)
@@ -791,13 +791,12 @@ if __name__ == "__main__":
                     result6 = thread6.join()
                     logging.info("NOTRAN")
                     logging.info(result6)
-                    if 0 in result6:
-                        vtype=0
-                        logging.info("GOLONGAN 0 di NOTRAN")
-                    elif 1 in result6:
+                    if 1 in result6:
+                        logging.info("GOLONGAN 2 di NOTRAN")
                         vtype=2
                     elif 3 in result6:
                         vtype=3
+                        logging.info("GOLONGAN 3 di NOTRAN")
                 ws.send(
                     json.dumps(
                         {
