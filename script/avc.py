@@ -682,11 +682,11 @@ if __name__ == "__main__":
                 # Golongan 1
                 vtype = 0
             else:
-                thread1 = inferThread(yolov5_wrapper_cam12, image2)
-                thread1.start()
-                raw_result1 = list(chain(thread1.join(), buffer_list))
-                raw_result1.sort()
-                result2 = [x for x in raw_result1 if x !=
+                thread2 = inferThread(yolov5_wrapper_cam12, image2)
+                thread2.start()
+                raw_result2 = list(chain(thread2.join(), buffer_list))
+                raw_result2.sort()
+                result2 = [x for x in raw_result2 if x !=
                            0 and x != 1 and x != 4 and x != 5]
                 # Truck L and Double Two Tire
                 if (result1[0] == 4 and result2[0] == 3 and result2[1] == 3):
@@ -699,23 +699,21 @@ if __name__ == "__main__":
                     thread3.start()
                     result3 = list(chain(thread3.join(), buffer_list))
                     result3.sort()
-                    logging.info(result3)
+                    logging.info("BUFFER :" +str(result3))
                     vtype = 4
                     if 1 in result3:
                         vtype = 3
                     logging.info("GOL 4 MENJADI: "+str(vtype))
                 elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 3):
                     # Check Cam 3
-                    thread3 = inferThread(yolov5_wrapper_cam3, image3)
-                    thread3.start()
-                    result3 = thread3.join()
-                    logging.info("perulangan golongan 5 atau 4: " + str(result3))
-                    if 2 in result3:
+                    thread4 = inferThread(yolov5_wrapper_cam3, image3)
+                    thread4.start()
+                    result4 = thread4.join()
+                    logging.info("perulangan golongan 5 atau 4: " + str(result4))
+                    vtype = 4
+                    if result4[0]==2:
                         # Golongan 5
                         vtype = 5
-                    elif 3 in result3:
-                        # Golongan 4
-                        vtype = 4
                 # Truck L and Two Tire
                 elif (result1[0] == 4 and result2[0] == 3):
                     # Golongan 3
@@ -724,11 +722,11 @@ if __name__ == "__main__":
                 elif result1[0] == 5 or result1[0] == 4:
                     # Golongan 2
                     vtype = 2
-                    thread3 = inferThread(yolov5_wrapper_cam3, image2)
-                    thread3.start()
-                    result3 = thread3.join()
-                    logging.info("perulangan golongan 2 atau 1: " + str(result3))
-                    if 0 in result3:
+                    thread5 = inferThread(yolov5_wrapper_cam3, image2)
+                    thread5.start()
+                    result5 = thread5.join()
+                    logging.info("perulangan golongan 2 atau 1: " + str(result5))
+                    if 0 in result5:
                         # Golongan 5
                         vtype = 0
                         logging.info("BERUBAH MENJADI: " + str(vtype))
@@ -783,16 +781,16 @@ if __name__ == "__main__":
             try:
                 if vtype == 8:
                     vtype = 0
-                    thread3 = inferThread(yolov5_wrapper_cam3, image2)
-                    thread3.start()
-                    result3 = thread3.join()
-                    logging.info(result3)
-                    if 0 in result3:
+                    thread6 = inferThread(yolov5_wrapper_cam3, image2)
+                    thread6.start()
+                    result6 = thread3.join()
+                    logging.info(result6)
+                    if 0 in result6:
                         vtype=0
                         logging.info("GOLONGAN 0 di NOTRAN")
-                    elif 1 in result3:
+                    elif 1 in result6:
                         vtype=2
-                    elif 3 in result3:
+                    elif 3 in result6:
                         vtype=3
                 ws.send(
                     json.dumps(
