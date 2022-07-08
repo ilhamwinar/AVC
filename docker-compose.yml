@@ -6,7 +6,7 @@ networks:
 services:
     LidarAPI:
         container_name: LidarAPI
-        image: yudhabhakti/lidarapi
+        image: yudhabhakti/lidarapi:iot
         ports:
             - "3008:3008"
         environment:
@@ -44,7 +44,7 @@ services:
 
     AIcam:
         container_name: AIcam
-        image: yudhabhakti/avc-ai:iot
+        image: yudhabhakti/avc-ai
         command: python3 /workspace/script/avc.py
         runtime: nvidia
         volumes:
