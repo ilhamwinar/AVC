@@ -627,7 +627,7 @@ if __name__ == "__main__":
     # YoLov5TRT instance
     yolov5_wrapper_cam12 = YoLov5TRT(engine_file_path_cam12)
     # yolov5_wrapper_cam2 = YoLov5TRT(engine_file_path_cam2)
-    #yolov5_wrapper_cam3 = YoLov5TRT(engine_file_path_cam3)
+    yolov5_wrapper_cam3 = YoLov5TRT(engine_file_path_cam3)
     # Create a new thread to do warm_up
     # for i in range(5):
     #     thread1 = warmUpThread(yolov5_wrapper_cam12)
@@ -695,7 +695,6 @@ if __name__ == "__main__":
                 # Truck L and Double One Tire
                 elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 2):
                     # Check Cam 3
-                    yolov5_wrapper_cam3 = YoLov5TRT(engine_file_path_cam3)
                     thread3 = inferThread(yolov5_wrapper_cam3, image3)
                     thread3.start()
                     raw_result3 = list(chain(thread3.join(), buffer_list))
@@ -711,7 +710,6 @@ if __name__ == "__main__":
                 # Truck L and One Tire and Double Tire
                 elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 3):
                     # Check Cam 3
-                    yolov5_wrapper_cam3 = YoLov5TRT(engine_file_path_cam3)
                     thread3 = inferThread(yolov5_wrapper_cam3, image3)
                     thread3.start()
                     result3 = thread3.join()
