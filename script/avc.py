@@ -712,10 +712,10 @@ if __name__ == "__main__":
                     thread4.start()
                     result4 = thread4.join()
                     logging.info("perulangan golongan 5 atau 4: " + str(result4))
-                    vtype = 3
-                    if 2 in result4:
+                    vtype = 5
+                    if 1 in result4:
                         # Golongan 5
-                        vtype = 5
+                        vtype = 3
                     elif 3 in result4:
                         vtype = 4
                     logging.info("GOL 3 MENJADI: "+str(vtype))    
