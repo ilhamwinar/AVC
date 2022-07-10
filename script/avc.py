@@ -711,10 +711,10 @@ if __name__ == "__main__":
                     result4 = thread4.join()
                     logging.info("BUFFER 5: " + str(result4))
                     vtype = 5
-                    if 1 in result4:
-                        # Golongan 5
-                        vtype = 3
-                    elif 3 in result4:
+                    # if 1 in result4:
+                    #     # Golongan 5
+                    #     vtype = 3
+                    if 3 in result4:
                         vtype = 4
                     logging.info("GOL 5 MENJADI: "+str(vtype))    
                 # Truck L and Two Tire
