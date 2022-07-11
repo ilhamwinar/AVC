@@ -697,11 +697,9 @@ if __name__ == "__main__":
                     thread3.start()
                     result3 = list(chain(thread3.join(), buffer_list))
                     result3.sort()
-                    logging.info("BUFFER :" +str(result3))
+                    logging.info("BUFFER 4 :" +str(result3))
                     vtype = 4
-                    if 1 in result3:
-                        vtype = 3
-                    elif 2 in result3:
+                    if 2 in result3:
                         vtype = 5
                     logging.info("GOL 4 MENJADI: "+str(vtype))
                 elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 3):
