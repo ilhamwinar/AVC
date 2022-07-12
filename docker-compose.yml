@@ -6,7 +6,7 @@ networks:
 services:
     LidarAPI:
         container_name: LidarAPI
-        image: yudhabhakti/lidarapi:iot
+        image: yudhabhakti/lidarapi
         ports:
             - "3008:3008"
         environment:
