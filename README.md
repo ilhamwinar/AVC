@@ -33,6 +33,10 @@
   - Menulis parameter di file **.env**
     ```bash
     nano .env
+    
+    atau 
+    
+    sudo gedit .env
     ```
     ```yaml
         #Control Unit Environment
