@@ -15,10 +15,16 @@
     sudo chmod +x avc_prepare.sh
     sudo ./avc_prepare.sh
     ```
+  - Bila terdapat error /var/run/docker.sock
+    ```bash
+    sudo chmod 777 /var/run/docker.sock
+    ```
+    
   - Melakukan Download dan Update Aplikasi
     ```bash
     sudo ./update.sh
     ```
+    
   - Mematikan dan menyalakan ulang Control Unit
     ```bash
     sudo reboot
