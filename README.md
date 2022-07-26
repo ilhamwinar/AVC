@@ -34,10 +34,12 @@
     ```bash
     nano .env
     ``` 
+    
    - atau bisa menggunakan sudo gedit parameter di file **.env**
     ```bash
     sudo gedit .env
     ```
+  
     ```yaml
     #Control Unit Environment
     #================================================================
