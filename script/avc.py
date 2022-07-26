@@ -813,13 +813,18 @@ if __name__ == "__main__":
                     )
                 )
                 logging.info("GOLONGAN : %d", vtype)
+                logging.info("FILE NAME CAM1: "+f1)
+                logging.info("FILE NAME CAM2: "+f2)
+                logging.info("FILE NAME CAM3: "+f3)
                 logging.info("SEND SUCCESS")
             except Exception as e:
                 logging.error(f"Exception occurred in sending: {e}")
                 telegram_bot_sendtext(f"Exception occurred in sending: {e}")
+
             cv2.imwrite(f1, image1)
             cv2.imwrite(f2, image2)
             cv2.imwrite(f3, image3)
+
         except Empty:
             continue
 
