@@ -701,6 +701,9 @@ if __name__ == "__main__":
                     vtype = 4
                     if 2 in result3:
                         vtype = 5
+                    elif 1 in result3:
+                    #golongan3
+                        vtype = 3
                     logging.info("GOL 4 MENJADI: "+str(vtype))
                 elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 3):
                     # Check Cam 3
