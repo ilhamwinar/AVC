@@ -730,7 +730,7 @@ if __name__ == "__main__":
                     if 0 in result5:
                         # Golongan 0
                         vtype = 0
-                        logging.info("GOL 2 BERUBAH MENJADI: " + str(vtype))
+                    logging.info("GOL 2 BERUBAH MENJADI: " + str(vtype))
 
 
             # print("{} [INFO] PREDICTION : {}, CONFIDENCE : {}, time elapsed: {} ".format(clocknow, vtype, conf, time.time() - t), flush=True)
