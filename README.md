@@ -35,7 +35,7 @@
     nano .env
     ``` 
     
-   - atau bisa menggunakan sudo gedit parameter di file **.env**
+   - buka environment.ini lalu copy ke .env, caranya bisa menggunakan sudo gedit parameter di file **.env** lalu copy kedalam file tersebut
     ```bash
     sudo gedit .env
     ```
