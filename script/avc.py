@@ -712,7 +712,7 @@ if __name__ == "__main__":
                     logging.info("GOL 5 MENJADI: "+str(vtype))    
                 # Truck L and Two Tire
                 elif (result1[0] == 4 and result2[0] == 3):
-                    # Golongan 3
+                    # Golongan 3, coba tambahkan one tire, one tire untuk kasus golongan 3 yang heran. untuk golongan 4 gandeng, prioritas cam 3 deteksi sorting one tire, one tire.
                     vtype = 3
                 # Truck L or Truck S
                 elif result1[0] == 5 or result1[0] == 4:
