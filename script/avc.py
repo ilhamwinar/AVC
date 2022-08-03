@@ -681,6 +681,7 @@ if __name__ == "__main__":
                 raw_result2.sort()
                 result2 = [x for x in raw_result2 if x !=
                            0 and x != 1 and x != 4 and x != 5]
+                logging.info("BUFFER STRUKTUR DATA CAM2 :" +str(result2))
                 # Truck L and Double Two Tire
                 if (result1[0] == 4 and result2[0] == 3 and result2[1] == 3):
                     # Golongan 5
@@ -696,9 +697,9 @@ if __name__ == "__main__":
                     vtype = 4
                     if 2 in result3:
                         vtype = 5
-                    elif 1 in result3:
-                    #golongan3 perlu dipertimbangkan dengan result3.sort antrian listnya
-                        vtype = 3
+                    # elif 1 in result3:
+                    # #golongan3 perlu dipertimbangkan dengan result3.sort antrian listnya
+                    #     vtype = 3
                     logging.info("GOL 4 MENJADI: "+str(vtype))
                 elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 3):
                     # Check Cam 3
@@ -776,18 +777,33 @@ if __name__ == "__main__":
             )
             try:
                 if vtype == 8:
-                    vtype = 0
+                    vtype = 8
                     thread6 = inferThread(yolov5_wrapper_cam3, image2)
                     thread6.start()
                     result6 = thread6.join()
                     logging.info("NOTRAN")
-                    logging.info(result6)
-                    if 1 in result6:
+                    logging.info(result6)                    
+                    if 0 in result6:
+                        vtype = 0
+                        logging.info("GOLONGAN 1 di NOTRAN")
+                    elif 1 in result6:
                         logging.info("GOLONGAN 2 di NOTRAN")
                         vtype=2
                     elif 3 in result6:
                         vtype=3
                         logging.info("GOLONGAN 3 di NOTRAN")
+                    elif (1 in result6) and (3 in result6):
+                        vtype=4
+                        logging.info("GOLONGAN 4 di NOTRAN")
+                    elif (1 in result6) and (2 in result6):
+                        vtype=5
+                        logging.info("GOLONGAN 5 di NOTRAN")
+                    elif (3 in result6) and (2 in result6):
+                        vtype=5
+                        logging.info("GOLONGAN 5 di NOTRAN")
+                    else:
+                        logging.info("NOTRAN BUKAN KENDARAAN")
+                    
                 ws.send(
                     json.dumps(
                         {
