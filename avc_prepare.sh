@@ -39,6 +39,10 @@ sudo chmod +x /usr/local/bin/docker-compose
 # ==================
 sudo curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
 
+# Install sshpass
+# ==================
+sudo apt-get install sshpass 
+
 # SwapMemory JetsonHacksNano
 # ==================
 sudo curl -o setSwapMemorySize.sh https://raw.githubusercontent.com/JetsonHacksNano/resizeSwapMemory/master/setSwapMemorySize.sh
