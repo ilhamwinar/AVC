@@ -1,6 +1,7 @@
 # Create Folder for Mount Volumes
 # ==========================
 sudo mkdir db influxdb
+sudo mkdir /home/avc/data
 sudo mkdir /home/avc/data/{0,1,2,3,4,5,8,lidar}
 
 # Create Folder for Mount Volumes
