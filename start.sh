@@ -6,8 +6,5 @@ docker-compose up --detach --remove-orphans
 # ==================
 docker image prune --all --force
 
-sleep 5
-
-# Docker restart LidarAPI
-# ==================
-docker restart LidarAPI
+sleep 10
+docker start LidarAPI
