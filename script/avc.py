@@ -28,8 +28,6 @@ CWD = os.getcwd()
 # Load Environment Variables
 # =============================================================
 IP = config("IP")
-TELEGRAM_BOT_TOKEN = config("TELEGRAM_BOT_TOKEN")
-CHAT_ID = config("CHAT_ID")
 GERBANG = config("GERBANG")
 GARDU = config("GARDU")
 MODEL_OBJECT_DETECTION_CAM12 = config("MODEL_OBJECT_DETECTION_CAM12")
@@ -428,22 +426,6 @@ class inferThread(threading.Thread):
         threading.Thread.join(self)
         return self._return
 
-
-# =============================================================
-# Telegram Bot
-# =============================================================
-def telegram_bot_sendtext(bot_message):
-    message = "AI Error di "+GERBANG+" "+GARDU + " "
-    bot_token = TELEGRAM_BOT_TOKEN
-    bot_chatID = CHAT_ID
-    send_text = 'https://api.telegram.org/bot' + bot_token + '/sendMessage?chat_id=' + \
-        bot_chatID + '&parse_mode=Markdown&text=' + message + bot_message
-
-    response = requests.get(send_text)
-
-    return response.json()
-
-
 # =============================================================
 # Web Socket Function
 # =============================================================
@@ -464,24 +446,18 @@ def on_message(ws, message):
                         qImage1.get(timeout=0.5)
                     except Exception as e:
                         logging.error(f"Exception in clearing queue im1 : {e}")
-                        telegram_bot_sendtext(
-                            f"Exception in clearing queue im1 : {e}")
             if size2 > 0:
                 for i in range(0, size2):
                     try:
                         qImage2.get(timeout=0.5)
                     except Exception as e:
                         logging.error(f"Exception in clearing queue im2 : {e}")
-                        telegram_bot_sendtext(
-                            f"Exception in clearing queue im2 : {e}")
             if size3 > 0:
                 for i in range(0, size3):
                     try:
                         qImage3.get(timeout=0.5)
                     except Exception as e:
                         logging.error(f"Exception in clearing queue im3 : {e}")
-                        telegram_bot_sendtext(
-                            f"Exception in clearing queue im3 : {e}")
 
         logging.info("RECEIVING SIGNAL FROM LIDAR")
         qTrig1.put(1)
@@ -521,7 +497,6 @@ def on_open(ws):
 
 def on_error(ws, error):
     logging.error(f"Error ws : {error}")
-    telegram_bot_sendtext(f"Error ws : {error}")
 
 # =============================================================
 # Get Camera From CCTV
@@ -535,7 +510,6 @@ def getCamera(src, qListen, qImage, att):
         cap = cv2.VideoCapture(src)
     except cv2.error as e:
         logging.error(f"Error in opening {att} : {e}")
-        telegram_bot_sendtext(f"Error in opening {att} : {e}")
 
     height = 270
     width = 480
@@ -559,35 +533,29 @@ def getCamera(src, qListen, qImage, att):
                         continue
                     except Exception as e:
                         logging.error(f"Exception in {att} thread : {e}")
-                        telegram_bot_sendtext(
-                            f"Exception in {att} thread : {e}")
                         break
                 else:
                     logging.error(f"{att} not returning image")
-                    telegram_bot_sendtext(f"{att} not returning image")
                     cap.release()
                     try:
                         cap = cv2.VideoCapture(src)
                     except cv2.error as e:
                         logging.error(f"Error in opening {att}")
-                        telegram_bot_sendtext(f"Error in opening {att}")
                         continue
 
             else:
                 logging.error(f"{att} cannot be open, trying to reconnect")
-                telegram_bot_sendtext(
-                    f"{att} cannot be open, trying to reconnect")
                 time.sleep(0.5)
                 try:
                     cap = cv2.VideoCapture(src)
                 except cv2.error as e:
                     logging.error(f"Error in opening {att} : {e}")
-                    telegram_bot_sendtext(f"Error in opening {att} : {e}")
+
                     continue
 
         except Exception as e:
             logging.error(f"Exception in {att} in connecting : {e}")
-            telegram_bot_sendtext(f"Exception in {att} in connecting : {e}")
+
 
 
 if __name__ == "__main__":
@@ -662,6 +630,7 @@ if __name__ == "__main__":
             # 1 = One Tire
             # 2 = Three Tire
             # 3 = Two Tire
+            # 4 = Unik
             thread1 = inferThread(yolov5_wrapper_cam12, image1)
             thread1.start()
             raw_result1 = list(chain(thread1.join(), buffer_list))
@@ -682,8 +651,25 @@ if __name__ == "__main__":
                 result2 = [x for x in raw_result2 if x !=
                            0 and x != 1 and x != 4 and x != 5]
                 logging.info("BUFFER STRUKTUR DATA CAM2 :" +str(result2))
+
+                thread3 = inferThread(yolov5_wrapper_cam3, image2)
+                thread3.start()
+                result3 = list(chain(thread3.join(), buffer_list))
+                logging.info("BUFFER STRUKTUR DATA CAM23 :" +str(result3))
+                result3.sort()
+                if 4 in result3:
+                    vtype=4
+                    logging.info("LANGSUNG DARI GOLONGAN UNIK: " + str(vtype))
+                    logging.info("BUFFER GOL UNIK :" +str(result3))
+
+                    thread3 = inferThread(yolov5_wrapper_cam3, image3)
+                    thread3.start()
+                    result3 = thread3.join()
+                    if 2 in result3:
+                        vtype = 5
+                    logging.info("GOL UNIK FINAL MENJADI: "+str(vtype))
                 # Truck L and Double Two Tire
-                if (result1[0] == 4 and result2[0] == 3 and result2[1] == 3):
+                elif (result1[0] == 4 and result2[0] == 3 and result2[1] == 3):
                     # Golongan 5
                     vtype = 5
                 # Truck L and Double One Tire
@@ -695,37 +681,49 @@ if __name__ == "__main__":
                     result3.sort()
                     logging.info("BUFFER 4 :" +str(result3))
                     vtype = 4
-                    if 2 in result3:
-                        vtype = 5
+                    # if 2 in result3:
+                    #     vtype=5
+                    if 1 in result3:
+                        vtype=3
                     # elif 1 in result3:
                     # #golongan3 perlu dipertimbangkan dengan result3.sort antrian listnya
                     #     vtype = 3
                     logging.info("GOL 4 MENJADI: "+str(vtype))
                 elif (result1[0] == 4 and result2[0] == 2 and result2[1] == 3):
                     # Check Cam 3
-                    thread4 = inferThread(yolov5_wrapper_cam3, image3)
-                    thread4.start()
-                    result4 = thread4.join()
-                    logging.info("BUFFER 5: " + str(result4))
+                    thread3 = inferThread(yolov5_wrapper_cam3, image3)
+                    thread3.start()
+                    result3 = thread3.join()
+                    logging.info("BUFFER 5: " + str(result3))
                     vtype = 5
-                    if 3 in result4:
+                    if 3 in result3:
                         vtype = 4
                     logging.info("GOL 5 MENJADI: "+str(vtype))    
                 # Truck L and Two Tire
                 elif (result1[0] == 4 and result2[0] == 3):
                     # Golongan 3, coba tambahkan one tire, one tire untuk kasus golongan 3 yang heran. untuk golongan 4 gandeng, prioritas cam 3 deteksi sorting one tire, one tire.
                     vtype = 3
+                    # thread3 = inferThread(yolov5_wrapper_cam3, image2)
+                    # thread3.start()
+                    # result3 = thread3.join()
+                    logging.info("BUFFER 3: " + str(result3))
+                    if 4 in result3:
+                        # Golongan 0
+                        vtype = 4
+                    logging.info("GOL 3 BERUBAH MENJADI: " + str(vtype))
                 # Truck L or Truck S
                 elif result1[0] == 5 or result1[0] == 4:
                     # Golongan 2
                     vtype = 2
-                    thread5 = inferThread(yolov5_wrapper_cam3, image2)
-                    thread5.start()
-                    result5 = thread5.join()
-                    logging.info("BUFFER 2: " + str(result5))
-                    if 0 in result5:
+                    # thread3 = inferThread(yolov5_wrapper_cam3, image2)
+                    # thread3.start()
+                    # result3 = thread3.join()
+                    logging.info("BUFFER 2: " + str(result3))
+                    if 0 in result3:
                         # Golongan 0
                         vtype = 0
+                    if 4 in result3:
+                        vtype=4
                     logging.info("GOL 2 BERUBAH MENJADI: " + str(vtype))
 
 
@@ -777,28 +775,33 @@ if __name__ == "__main__":
             )
             try:
                 if vtype == 8:
-                    vtype = 8
-                    thread6 = inferThread(yolov5_wrapper_cam3, image2)
-                    thread6.start()
-                    result6 = thread6.join()
+                    vtype = 7
+                    thread3 = inferThread(yolov5_wrapper_cam3, image2)
+                    thread3.start()
+                    result3 = thread3.join()
                     logging.info("NOTRAN")
-                    logging.info(result6)                    
-                    if 0 in result6:
+                    logging.info(result3)                    
+                    if 0 in result3:
                         vtype = 0
                         logging.info("GOLONGAN 1 di NOTRAN")
-                    elif 1 in result6:
+                    elif 1 in result3:
                         logging.info("GOLONGAN 2 di NOTRAN")
                         vtype=2
-                    elif 3 in result6:
+                        if 4 in result3:
+                            vtype=4
+                        logging.info("GOLONGAN 3 di NOTRAN SEKARANG JADI GOLONGAN:"+str(vtype))
+                    elif 3 in result3:
                         vtype=3
-                        logging.info("GOLONGAN 3 di NOTRAN")
-                    elif (1 in result6) and (3 in result6):
+                        if 4 in result3:
+                            vtype=4
+                        logging.info("GOLONGAN 3 di NOTRAN SEKARANG JADI GOLONGAN:"+str(vtype))
+                    elif (1 in result3) and (3 in result3):
                         vtype=4
                         logging.info("GOLONGAN 4 di NOTRAN")
-                    elif (1 in result6) and (2 in result6):
+                    elif (1 in result3) and (2 in result3):
                         vtype=5
                         logging.info("GOLONGAN 5 di NOTRAN")
-                    elif (3 in result6) and (2 in result6):
+                    elif (3 in result3) and (2 in result3):
                         vtype=5
                         logging.info("GOLONGAN 5 di NOTRAN")
                     else:
@@ -821,13 +824,10 @@ if __name__ == "__main__":
                     )
                 )
                 logging.info("GOLONGAN : %d", vtype)
-                logging.info("FILE NAME CAM1: "+f1)
-                logging.info("FILE NAME CAM2: "+f2)
-                logging.info("FILE NAME CAM3: "+f3)
                 logging.info("SEND SUCCESS")
             except Exception as e:
                 logging.error(f"Exception occurred in sending: {e}")
-                telegram_bot_sendtext(f"Exception occurred in sending: {e}")
+
 
             cv2.imwrite(f1, image1)
             cv2.imwrite(f2, image2)
